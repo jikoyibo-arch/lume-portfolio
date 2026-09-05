@@ -539,22 +539,19 @@
     document.getElementById('funnel-impr').textContent = fmt0(impressions);
 
     const stages = [
-      {label:'Клики', small:'по объявлению', value:clicks, base:clicks},
-      {label:'Директ', small:'написали в сообщения', value:dms, base:clicks},
-      {label:'Записи', small:'забронировали визит', value:bookings, base:clicks},
-      {label:'Оплатили', small:'дошли и оплатили', value:attended, base:clicks}
+      {label:'Клики', small:'по объявлению', value:clicks, convFromPrev:null},
+      {label:'Директ', small:'написали в сообщения', value:dms, convFromPrev:v.dmRate},
+      {label:'Записи', small:'забронировали визит', value:bookings, convFromPrev:v.bookingRate},
+      {label:'Оплатили', small:'дошли и оплатили', value:attended, convFromPrev:v.showRate}
     ];
     const shades = ['#c98cae','#a85e8a','#8a4770','#7c3a63'];
     const shadesDark = ['#f2c9dd','#eaaacb','#eb96bf','#e59cc0'];
     const isDark = matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.getAttribute('data-theme')!=='light' || document.documentElement.getAttribute('data-theme')==='dark';
     const palette = isDark ? shadesDark : shades;
 
-    let prev = clicks;
     const rows = stages.map((s,i)=>{
-      const widthPct = Math.max(2, (s.value / clicks) * 100);
-      const conv = i===0 ? null : (prev>0 ? (s.value/prev)*100 : 0);
-      const convHtml = conv===null ? '' : `<div class="conv">конверсия ${pct(conv)}</div>`;
-      prev = s.value;
+      const widthPct = s.convFromPrev===null ? 100 : Math.max(3, Math.min(100, s.convFromPrev));
+      const convHtml = s.convFromPrev===null ? '' : `<div class="conv">конверсия ${pct(s.convFromPrev)}</div>`;
       return `<div class="funnel-row">
         <div class="stage-label">${s.label}<small>${s.small}</small></div>
         <div class="bar-track"><div class="bar-fill" style="width:${widthPct}%;background:${palette[i]}"></div></div>
