@@ -1,0 +1,344 @@
+<title>LUMÉ Competitor Watch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{
+    --bg:#f3eeec; --surface:#ffffff; --surface-sunken:#ece5e2;
+    --ink:#241f22; --ink-muted:#6b5c61; --ink-faint:#9a8b8f; --line:#e0d5d1;
+    --accent:#7c3a63; --accent-ink:#ffffff; --accent-soft:#f2dfe9;
+    --good:#2f7a63; --good-soft:#dcefe7;
+    --warning:#a3661f; --warning-soft:#f5e6d3;
+    --critical:#b5392a; --critical-soft:#f6ddd8;
+    --seg-direct:#7c3a63; --seg-aspir:#a3661f; --seg-budget:#2f7a63; --seg-informal:#3f5f7a; --seg-indirect:#6b5c61;
+    --shadow: 0 1px 2px rgba(36,31,34,.06), 0 8px 24px -12px rgba(36,31,34,.18);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+      --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+      --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+      --good:#7cd3ae; --good-soft:#20342c; --warning:#e3ac68; --warning-soft:#3a2f1e;
+      --critical:#ec8a7a; --critical-soft:#3d241f;
+      --seg-direct:#e59cc0; --seg-aspir:#e3ac68; --seg-budget:#7cd3ae; --seg-informal:#8fb6d9; --seg-indirect:#bfaeb1;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+    --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+    --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+    --good:#7cd3ae; --good-soft:#20342c; --warning:#e3ac68; --warning-soft:#3a2f1e;
+    --critical:#ec8a7a; --critical-soft:#3d241f;
+    --seg-direct:#e59cc0; --seg-aspir:#e3ac68; --seg-budget:#7cd3ae; --seg-informal:#8fb6d9; --seg-indirect:#bfaeb1;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .page{max-width:1100px;margin:0 auto;padding:40px 24px 80px;}
+  h1,h2,h3{text-wrap:balance;margin:0;}
+  .num{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  a{color:var(--accent);}
+
+  .header{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  .brand-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2.4rem;color:var(--accent);}
+  .brand-row h1{font-size:1.05rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;}
+  .header p{max-width:62ch;color:var(--ink-muted);font-size:.95rem;line-height:1.55;margin-top:8px;}
+  .fine{color:var(--ink-faint);font-size:.78rem;margin-top:6px;}
+
+  section{margin-bottom:40px;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+  .section-head h2{font-size:1.15rem;font-weight:600;}
+  .section-head .desc{font-size:.85rem;color:var(--ink-muted);}
+
+  /* filter pills */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .filters button{border:1px solid var(--line);background:var(--surface);padding:8px 14px;border-radius:999px;font:inherit;font-size:.82rem;font-weight:600;color:var(--ink-muted);cursor:pointer;display:flex;align-items:center;gap:7px;}
+  .filters button .dot{width:8px;height:8px;border-radius:50%;background:currentColor;}
+  .filters button.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .filters button.active .dot{background:var(--bg);}
+  .filters button:not(.active):hover{color:var(--ink);}
+
+  /* competitor cards */
+  .comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+  .comp-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:0;overflow:hidden;transition:opacity .2s ease, transform .2s ease;}
+  .comp-card[hidden]{display:none;}
+  .comp-card summary{list-style:none;cursor:pointer;padding:18px 20px;}
+  .comp-card summary::-webkit-details-marker{display:none;}
+  .seg-tag{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;margin-bottom:10px;}
+  .seg-tag .dot{width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .comp-card h3{font-size:1.05rem;font-weight:700;margin-bottom:4px;}
+  .comp-card .oneliner{font-size:.85rem;color:var(--ink-muted);line-height:1.5;}
+  .comp-meta{display:flex;gap:14px;margin-top:12px;font-size:.78rem;color:var(--ink-faint);flex-wrap:wrap;}
+  .comp-meta b{color:var(--ink);font-weight:600;}
+  .comp-card summary::after{content:'Развернуть профиль ↓';display:block;margin-top:12px;font-size:.72rem;color:var(--accent);font-weight:600;}
+  .comp-card[open] summary::after{content:'Свернуть ↑';}
+  .comp-body{padding:0 20px 20px;border-top:1px solid var(--line);margin-top:2px;padding-top:16px;}
+  .comp-body h4{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);font-weight:700;margin:14px 0 6px;}
+  .comp-body h4:first-child{margin-top:0;}
+  .comp-body p{font-size:.85rem;color:var(--ink-muted);line-height:1.6;margin:0;}
+  .creative-box{background:var(--surface-sunken);border-radius:10px;padding:12px 14px;font-size:.83rem;color:var(--ink-muted);line-height:1.55;}
+  .creative-box .fmt{color:var(--accent);font-weight:600;}
+
+  /* response chart */
+  .chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px;}
+  .chart-row{display:grid;grid-template-columns:170px 1fr 90px;align-items:center;gap:14px;padding:9px 0;}
+  .chart-row + .chart-row{border-top:1px dashed var(--line);}
+  .chart-row .who{font-size:.85rem;font-weight:600;}
+  .chart-row .who.lume{color:var(--accent);}
+  .bar-track{height:22px;background:var(--surface-sunken);border-radius:6px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;}
+  .chart-row .n{text-align:right;font-size:.88rem;font-weight:600;}
+  .chart-note{font-size:.82rem;color:var(--ink-muted);margin-top:16px;padding-top:14px;border-top:1px solid var(--line);}
+
+  /* swot */
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:700px){.swot{grid-template-columns:1fr;}}
+  .swot-card{border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
+  .swot-card h3{font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;}
+  .swot-card ul{margin:0;padding-left:1.1em;}
+  .swot-card li{font-size:.85rem;line-height:1.6;margin-bottom:6px;}
+  .swot-s{background:var(--good-soft);} .swot-s h3{color:var(--good);}
+  .swot-w{background:var(--warning-soft);} .swot-w h3{color:var(--warning);}
+  .swot-o{background:var(--accent-soft);} .swot-o h3{color:var(--accent);}
+  .swot-t{background:var(--critical-soft);} .swot-t h3{color:var(--critical);}
+
+  /* cadence checklist */
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;}
+  .cadence-row{display:flex;gap:14px;align-items:baseline;padding:11px 0;}
+  .cadence-row + .cadence-row{border-top:1px solid var(--line);}
+  .cadence-tag{flex:none;width:100px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);}
+  .cadence-row p{margin:0;font-size:.87rem;color:var(--ink-muted);line-height:1.55;}
+  .cadence-row b{color:var(--ink);}
+
+  footer{border-top:1px solid var(--line);padding-top:22px;font-size:.78rem;color:var(--ink-faint);line-height:1.7;margin-top:8px;}
+</style>
+
+<div class="page">
+  <div class="header">
+    <div>
+      <div class="brand-row">
+        <span class="wordmark">LUMÉ</span>
+        <h1>Competitor Watch · Анализ конкурентов</h1>
+      </div>
+      <p>Регулярный трекер конкурентного окружения LUMÉ в Киеве: 5 архетипов, сравнение по позиционированию и — главное — по скорости ответа в директ, измеренной через mystery shopping.</p>
+      <div class="fine">Конкуренты вымышленные (портфолио, не реальная разведка) — но архетипы и паттерны воспроизводят типичный рынок бьюти-услуг Киева.</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Кто в поле зрения</h2>
+      <div class="desc">Фильтр по сегменту — клик разворачивает полный профиль</div>
+    </div>
+    <div class="filters" id="filters">
+      <button class="active" data-seg="all">Все (5)</button>
+      <button data-seg="direct"><span class="dot" style="color:var(--seg-direct)"></span>Прямые</button>
+      <button data-seg="aspir"><span class="dot" style="color:var(--seg-aspir)"></span>Аспирационный</button>
+      <button data-seg="budget"><span class="dot" style="color:var(--seg-budget)"></span>Бюджетный</button>
+      <button data-seg="informal"><span class="dot" style="color:var(--seg-informal)"></span>Неформальный</button>
+      <button data-seg="indirect"><span class="dot" style="color:var(--seg-indirect)"></span>Косвенный</button>
+    </div>
+
+    <div class="comp-grid" id="compGrid">
+
+      <details class="comp-card" data-seg="direct">
+        <summary>
+          <span class="seg-tag" style="background:var(--accent-soft);color:var(--seg-direct)"><span class="dot"></span>Прямой</span>
+          <h3>Glow Bar</h3>
+          <div class="oneliner">Сеть из 2 точек, «экспресс-депиляция за 20 минут» — прямой конкурент один-в-один по услугам и цене.</div>
+          <div class="comp-meta"><span>Цена: <b>≈ уровень LUMÉ</b></span><span>Ответ в директ: <b>47 мин</b></span></div>
+        </summary>
+        <div class="comp-body">
+          <h4>Канал и тактика</h4>
+          <p>Instagram Reels + таргет, регулярные розыгрыши сертификатов. Программа лояльности: 6‑й визит бесплатно.</p>
+          <h4>Пример креатива</h4>
+          <div class="creative-box"><span class="fmt">Reels, апрель:</span> «Успей за 20 минут» — счётчик времени процедуры как визуальный крючок, призыв в директ.</div>
+          <h4>Чему учимся</h4>
+          <p>Сильный видео-контент вокруг скорости процедуры (не путать со скоростью ОТВЕТА — здесь у них слабое место, см. график ниже).</p>
+        </div>
+      </details>
+
+      <details class="comp-card" data-seg="aspir">
+        <summary>
+          <span class="seg-tag" style="background:var(--warning-soft);color:var(--seg-aspir)"><span class="dot"></span>Аспирационный</span>
+          <h3>Silk &amp; Brow Atelier</h3>
+          <div class="oneliner">Премиальный монобренд: только брови и ресницы, один флагманский салон в центре.</div>
+          <div class="comp-meta"><span>Цена: <b>+40–60%</b></span><span>Ответ в директ: <b>3 мин</b></span></div>
+        </summary>
+        <div class="comp-body">
+          <h4>Канал и тактика</h4>
+          <p>Микро-инфлюенсеры, эстетичный фид без прямой рекламы. Запись — через онлайн-бронирование на сайте, не через директ.</p>
+          <h4>Пример креатива</h4>
+          <div class="creative-box"><span class="fmt">Пост, карусель:</span> «до/после» с инфлюенсером, никаких скидок — доверие продаётся через лицо, не через цену.</div>
+          <h4>Чему учимся</h4>
+          <p>Формализованная запись (сайт-бронирование) вместо ручного директа — снижает риск человеческой задержки ответа.</p>
+        </div>
+      </details>
+
+      <details class="comp-card" data-seg="budget">
+        <summary>
+          <span class="seg-tag" style="background:var(--good-soft);color:var(--seg-budget)"><span class="dot"></span>Бюджетный</span>
+          <h3>EasyWax Express</h3>
+          <div class="oneliner">Сеть 4+ точек, формат «живая очередь без записи», ставка на поток и низкую цену.</div>
+          <div class="comp-meta"><span>Цена: <b>−25–30%</b></span><span>Ответ в директ: <b>120 мин</b></span></div>
+        </summary>
+        <div class="comp-body">
+          <h4>Канал и тактика</h4>
+          <p>Локальное SEO (Google Maps), много отзывов, сарафанное радио. Клиентский сервис не приоритет — компенсируют ценой и потоком.</p>
+          <h4>Пример креатива</h4>
+          <div class="creative-box"><span class="fmt">Google Maps:</span> 340+ отзывов, средний рейтинг 4.6 — основной канал доверия, не Instagram.</div>
+          <h4>Чему учимся</h4>
+          <p>Сильная выдача в Google Maps/локальном поиске — у LUMÉ этот канал пока не развит вообще.</p>
+        </div>
+      </details>
+
+      <details class="comp-card" data-seg="informal">
+        <summary>
+          <span class="seg-tag" style="background:#eaf1f6;color:var(--seg-informal)"><span class="dot"></span>Неформальный</span>
+          <h3>Майстриня Оксана</h3>
+          <div class="oneliner">Соло-мастер, работает из дома, без юрлица и бренда — но с лояльной базой «постоянных».</div>
+          <div class="comp-meta"><span>Цена: <b>−35–45%</b></span><span>Ответ в директ: <b>8 мин</b></span></div>
+        </summary>
+        <div class="comp-body">
+          <h4>Канал и тактика</h4>
+          <p>Личный Instagram (2–3К подписчиков), сарафанное радио. Общается как подруга, а не как бизнес — тёплый персональный тон.</p>
+          <h4>Пример креатива</h4>
+          <div class="creative-box"><span class="fmt">Stories:</span> личные апдейты вперемешку с работами — граница между личным и рабочим аккаунтом стёрта, это и есть УТП.</div>
+          <h4>Чему учимся</h4>
+          <p>Персональные отношения — то, что теряется в сетевом формате. Компенсировать можно через CRM: персональные напоминания, поздравления с датами.</p>
+        </div>
+      </details>
+
+      <details class="comp-card" data-seg="indirect">
+        <summary>
+          <span class="seg-tag" style="background:var(--surface-sunken);color:var(--seg-indirect)"><span class="dot"></span>Косвенный</span>
+          <h3>Belle Époque Studio</h3>
+          <div class="oneliner">Салон полного цикла (волосы, ногти, брови/ресницы) — конкурирует не ценой, а пакетами услуг.</div>
+          <div class="comp-meta"><span>Цена: <b>≈ уровень LUMÉ</b></span><span>Ответ в директ: <b>25 мин</b></span></div>
+        </summary>
+        <div class="comp-body">
+          <h4>Канал и тактика</h4>
+          <p>Пакеты «день красоты», кросс-продажи между направлениями. Активно предлагают апсейл на другие услуги в переписке.</p>
+          <h4>Пример креатива</h4>
+          <div class="creative-box"><span class="fmt">Пост:</span> «Депиляция + брови = -15%» — комбо-предложение как основной рекламный крючок.</div>
+          <h4>Чему учимся</h4>
+          <p>Пакетирование услуг (комбо со скидкой) — у LUMÉ такого предложения пока нет, хотя портфель услуг это позволяет.</p>
+        </div>
+      </details>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Mystery shopping: скорость ответа в директ</h2>
+      <div class="desc">Один и тот же вопрос «Здравствуйте, сколько стоит...», разное время суток, один день замера</div>
+    </div>
+    <div class="chart">
+      <div class="chart-row">
+        <div class="who lume">LUMÉ · цель (SLA)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--accent)"></div></div>
+        <div class="n num">≤ 1 мин</div>
+      </div>
+      <div class="chart-row">
+        <div class="who">Silk &amp; Brow Atelier</div>
+        <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--ink-faint)"></div></div>
+        <div class="n num">3 мин</div>
+      </div>
+      <div class="chart-row">
+        <div class="who">Майстриня Оксана</div>
+        <div class="bar-track"><div class="bar-fill" style="width:16%;background:var(--ink-faint)"></div></div>
+        <div class="n num">8 мин</div>
+      </div>
+      <div class="chart-row">
+        <div class="who">Belle Époque Studio</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42%;background:var(--ink-faint)"></div></div>
+        <div class="n num">25 мин</div>
+      </div>
+      <div class="chart-row">
+        <div class="who">Glow Bar</div>
+        <div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--ink-faint)"></div></div>
+        <div class="n num">47 мин</div>
+      </div>
+      <div class="chart-row">
+        <div class="who">EasyWax Express</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--ink-faint)"></div></div>
+        <div class="n num">120 мин</div>
+      </div>
+      <div class="chart-note"><strong>Вывод:</strong> ни один конкурент не отвечает быстрее 3 минут. По данным из Проекта 1, ответ в течение минуты даёт кратный рост конверсии в запись. Значит, скорость ответа — это не внутренняя метрика эффективности, а свободная конкурентная ниша, которую пока никто на рынке не занял.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>SWOT LUMÉ на фоне этого окружения</h2></div>
+    <div class="swot">
+      <div class="swot-card swot-s">
+        <h3>Сильные стороны</h3>
+        <ul>
+          <li>3 точки — шире охват района, чем соло-мастер и Silk&nbsp;&amp;&nbsp;Brow</li>
+          <li>Полный портфель услуг (депиляция + брови + ресницы) в одном месте</li>
+          <li>CRM с историей клиента (YCLIENTS-класса), не блокнот и память мастера</li>
+        </ul>
+      </div>
+      <div class="swot-card swot-w">
+        <h3>Слабые стороны</h3>
+        <ul>
+          <li>Медленный ответ в директ в базовом сценарии — хуже, чем у всех, кроме двух конкурентов</li>
+          <li>Нет пакетных предложений/кросс-продаж, в отличие от Belle Époque</li>
+          <li>Почти нет присутствия в Google Maps/отзывах</li>
+          <li>Нет программы лояльности, в отличие от Glow Bar</li>
+        </ul>
+      </div>
+      <div class="swot-card swot-o">
+        <h3>Возможности</h3>
+        <ul>
+          <li>Занять нишу «самый быстрый ответ на рынке» — свободна, см. график выше</li>
+          <li>Ввести комбо-пакеты (депиляция + брови) по образцу Belle Époque</li>
+          <li>Прокачать Google Maps/отзывы — дешёвый канал, которым никто из прямых конкурентов не занят</li>
+        </ul>
+      </div>
+      <div class="swot-card swot-t">
+        <h3>Угрозы</h3>
+        <ul>
+          <li>EasyWax демпингует ценой и держит сильную локальную SEO-выдачу</li>
+          <li>Silk &amp; Brow забирает премиальный сегмент через инфлюенсеров</li>
+          <li>Неформальные мастера уводят лояльных клиентов личными отношениями без наценки сети</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Регламент мониторинга</h2></div>
+    <div class="panel">
+      <div class="cadence-row"><span class="cadence-tag">Еженедельно</span><p><b>Скриншоты активных креативов</b> конкурентов (реальный инструмент для этого — публичная Meta Ad Library) — в общий трекер находок.</p></div>
+      <div class="cadence-row"><span class="cadence-tag">Ежемесячно</span><p><b>Mystery shopping</b> — написать всем 5 конкурентам под видом клиента, зафиксировать время и тон ответа, сравнить с целевым SLA LUMÉ.</p></div>
+      <div class="cadence-row"><span class="cadence-tag">Ежеквартально</span><p><b>Полный аудит</b> цен и позиционирования, обновление SWOT, пересмотр сегментации при появлении новых игроков.</p></div>
+      <div class="cadence-row"><span class="cadence-tag">Ответственный</span><p>Маркетолог-ассистент. Находки — в общую таблицу отчёта (стыкуется с CRM-дашбордом из Проекта 3).</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Источники и допущения.</strong> Конкуренты — вымышленные, но архетипы (сетевой экспресс-формат, монобрендовый премиум, дискаунтер с локальным SEO, неформальный соло-мастер, full‑service салон) и паттерны каналов воспроизводят типичный рынок бьюти‑услуг Киева. Данные mystery shopping — иллюстративные, отражающие реалистичный разброс скорости ответа в индустрии (см. также Проект 1: Naiva/LeadResponse 2026). Meta Ad Library, упомянутая в регламенте — реальный публичный инструмент, применимый в реальной работе.
+    <div style="margin-top:14px;">LUMÉ — вымышленная компания, проект 2 из 7. См. также <a href="../project-1-unit-economics/">юнит-экономику (Проект 1)</a>. Все проекты — <a href="../">на главной портфолио</a>.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const buttons = document.querySelectorAll('#filters button');
+  const cards = document.querySelectorAll('.comp-card');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      buttons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const seg = btn.dataset.seg;
+      cards.forEach(card=>{
+        card.hidden = seg!=='all' && card.dataset.seg!==seg;
+      });
+    });
+  });
+})();
+</script>

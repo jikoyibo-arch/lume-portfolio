@@ -1,0 +1,572 @@
+<title>LUMÉ Unit Economics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{
+    --bg:#f3eeec;
+    --surface:#ffffff;
+    --surface-sunken:#ece5e2;
+    --ink:#241f22;
+    --ink-muted:#6b5c61;
+    --ink-faint:#9a8b8f;
+    --line:#e0d5d1;
+    --accent:#7c3a63;
+    --accent-ink:#ffffff;
+    --accent-soft:#f2dfe9;
+    --good:#2f7a63;
+    --good-soft:#dcefe7;
+    --warning:#a3661f;
+    --warning-soft:#f5e6d3;
+    --critical:#b5392a;
+    --critical-soft:#f6ddd8;
+    --shadow: 0 1px 2px rgba(36,31,34,.06), 0 8px 24px -12px rgba(36,31,34,.18);
+    --glass-highlight: rgba(255,255,255,.55);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1a1618;
+      --surface:#231e21;
+      --surface-sunken:#2c2528;
+      --ink:#f3eae8;
+      --ink-muted:#bfaeb1;
+      --ink-faint:#8a7b7e;
+      --line:#3a3235;
+      --accent:#e59cc0;
+      --accent-ink:#2a1420;
+      --accent-soft:#3a2431;
+      --good:#7cd3ae;
+      --good-soft:#20342c;
+      --warning:#e3ac68;
+      --warning-soft:#3a2f1e;
+      --critical:#ec8a7a;
+      --critical-soft:#3d241f;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+      --glass-highlight: rgba(255,255,255,.07);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1a1618;
+    --surface:#231e21;
+    --surface-sunken:#2c2528;
+    --ink:#f3eae8;
+    --ink-muted:#bfaeb1;
+    --ink-faint:#8a7b7e;
+    --line:#3a3235;
+    --accent:#e59cc0;
+    --accent-ink:#2a1420;
+    --accent-soft:#3a2431;
+    --good:#7cd3ae;
+    --good-soft:#20342c;
+    --warning:#e3ac68;
+    --warning-soft:#3a2f1e;
+    --critical:#ec8a7a;
+    --critical-soft:#3d241f;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    --glass-highlight: rgba(255,255,255,.07);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 480px at 20% -10%, var(--accent-soft) 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0; z-index:2000; pointer-events:none;
+    opacity:.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .page{max-width:1140px;margin:0 auto;padding:40px 24px 80px;position:relative;z-index:1;}
+  h1,h2,h3{font-family:'IBM Plex Sans',system-ui,sans-serif;text-wrap:balance;margin:0;}
+  .num{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  a{color:var(--accent);}
+
+  /* header */
+  .header{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;justify-content:space-between;padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  .brand-row{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2.4rem;color:var(--accent);letter-spacing:.5px;}
+  .brand-row h1{font-size:1.05rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.06em;}
+  .header p{max-width:56ch;color:var(--ink-muted);font-size:.95rem;line-height:1.55;margin-top:8px;}
+  .fine{color:var(--ink-faint);font-size:.78rem;margin-top:6px;}
+
+  /* scenario toggle */
+  .toggle-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+  .toggle-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);}
+  .toggle{display:flex;background:var(--surface-sunken);border-radius:999px;padding:4px;gap:4px;border:1px solid var(--line);}
+  .toggle button{border:none;background:transparent;padding:9px 16px;border-radius:999px;font:inherit;font-size:.85rem;font-weight:600;color:var(--ink-muted);cursor:pointer;transition:background .15s,color .15s;}
+  .toggle button.active{background:var(--accent);color:var(--accent-ink);}
+  .toggle button:not(.active):hover{color:var(--ink);}
+
+  /* kpi grid */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:36px;}
+  .kpi{
+    background:linear-gradient(165deg, color-mix(in srgb, var(--surface) 88%, transparent), color-mix(in srgb, var(--surface) 55%, transparent));
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    border-radius:var(--radius);padding:18px 18px 16px;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 40%, transparent), var(--shadow);
+    transition:box-shadow .3s ease, transform .2s ease;
+  }
+  .kpi:hover{transform:translateY(-2px);}
+  .kpi .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-faint);font-weight:600;}
+  .kpi .value{font-size:1.9rem;font-weight:600;margin-top:8px;line-height:1;}
+  .kpi .sub{font-size:.78rem;color:var(--ink-muted);margin-top:8px;line-height:1.4;}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:999px;margin-top:10px;}
+  .pill.good{background:var(--good-soft);color:var(--good);}
+  .pill.warning{background:var(--warning-soft);color:var(--warning);}
+  .pill.critical{background:var(--critical-soft);color:var(--critical);}
+  .pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .meter{margin-top:12px;}
+  .meter-track{position:relative;height:6px;border-radius:99px;background:var(--surface-sunken);}
+  .meter-fill{height:100%;border-radius:99px;background:var(--accent);transition:width .3s cubic-bezier(.22,.61,.36,1),background .25s ease;}
+  .meter-tick{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--ink-faint);opacity:.55;}
+
+  /* section shell */
+  section{margin-bottom:40px;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+  .section-head h2{font-size:1.15rem;font-weight:600;}
+  .section-head .desc{font-size:.85rem;color:var(--ink-muted);}
+
+  /* funnel */
+  .funnel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px 24px;}
+  .funnel-note{font-size:.8rem;color:var(--ink-muted);margin-bottom:18px;}
+  .funnel-row{display:grid;grid-template-columns:150px 1fr 190px;align-items:center;gap:16px;padding:10px 0;}
+  .funnel-row + .funnel-row{border-top:1px dashed var(--line);}
+  .funnel-row .stage-label{font-size:.85rem;font-weight:600;}
+  .funnel-row .stage-label small{display:block;font-weight:400;color:var(--ink-faint);font-size:.72rem;margin-top:2px;}
+  .bar-track{height:26px;background:var(--surface-sunken);border-radius:6px;overflow:hidden;position:relative;}
+  .bar-fill{height:100%;border-radius:6px;transition:width .25s ease;}
+  .funnel-row .stats{text-align:right;font-size:.82rem;}
+  .funnel-row .stats .n{font-size:1rem;font-weight:600;}
+  .funnel-row .stats .conv{color:var(--ink-muted);font-size:.75rem;}
+
+  /* two column */
+  .two-col{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;}
+  @media (max-width:840px){.two-col{grid-template-columns:1fr;}}
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;}
+  .panel h3{font-size:.95rem;font-weight:600;margin-bottom:4px;}
+  .panel .group-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-faint);font-weight:600;margin:18px 0 10px;}
+  .panel .group-label:first-of-type{margin-top:16px;}
+  .field-row{padding:9px 0;}
+  .field-row .row-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+  .field-row label{font-size:.82rem;color:var(--ink);}
+  .field-row .tag{display:block;font-size:.68rem;color:var(--ink-faint);margin-top:2px;}
+  .field-row .row-controls{display:flex;align-items:center;gap:10px;margin-top:6px;}
+  .field-row input[type="number"]{width:76px;flex:none;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:.85rem;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface-sunken);color:var(--ink);}
+  .field-row input:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .field-row input[type="range"]{
+    flex:1; appearance:none; -webkit-appearance:none; height:4px; border-radius:99px; cursor:pointer;
+    background:linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--fill,50%), var(--surface-sunken) var(--fill,50%), var(--surface-sunken) 100%);
+  }
+  .field-row input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:16px; height:16px; border-radius:50%;
+    background:var(--surface); border:3px solid var(--accent);
+    box-shadow:0 1px 4px rgba(0,0,0,.2); cursor:grab; transition:transform .15s ease;
+  }
+  .field-row input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
+  .field-row input[type="range"]::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.05);}
+  .field-row input[type="range"]::-moz-range-thumb{
+    width:16px; height:16px; border-radius:50%; background:var(--surface); border:3px solid var(--accent);
+    box-shadow:0 1px 4px rgba(0,0,0,.2); cursor:grab;
+  }
+  .field-row input[type="range"]::-moz-range-track{height:4px;border-radius:99px;background:var(--surface-sunken);}
+  .field-row input[type="range"]::-moz-range-progress{height:4px;border-radius:99px;background:var(--accent);}
+  .kpi{transition:box-shadow .3s ease;}
+  .kpi.flash{box-shadow:0 0 0 2px var(--accent), var(--shadow);}
+
+  .insight-card{padding:14px 0;}
+  .insight-card + .insight-card{border-top:1px solid var(--line);}
+  .insight-card .tag-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:.72rem;font-weight:700;margin-right:8px;}
+  .insight-card h4{display:inline;font-size:.92rem;font-weight:600;}
+  .insight-card p{margin:8px 0 0;font-size:.85rem;color:var(--ink-muted);line-height:1.55;}
+
+  /* pricing table */
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  thead th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);font-weight:600;padding:0 0 8px;border-bottom:1px solid var(--line);}
+  tbody td{padding:9px 0;border-bottom:1px solid var(--line);}
+  tbody tr:last-child td{border-bottom:none;}
+  td.price{text-align:right;font-family:'IBM Plex Mono',monospace;}
+  .table-wrap{overflow-x:auto;}
+
+  footer{border-top:1px solid var(--line);padding-top:22px;font-size:.78rem;color:var(--ink-faint);line-height:1.7;}
+  footer strong{color:var(--ink-muted);}
+  .src-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:4px 24px;margin-top:10px;}
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="brand-row">
+        <span class="wordmark">LUMÉ</span>
+        <h1>Unit Economics · Модель юнит‑экономики</h1>
+      </div>
+      <p>Сеть из 3 бьюти‑студий в Киеве (депиляция, ламинирование бровей, наращивание ресниц) — вымышленный кейс, но все допущения опираются на реальные отраслевые бенчмарки 2025–2026. Источники — внизу страницы.</p>
+      <div class="fine">Валюта модели — гривна (₴). Курс для расчётов: 1 USD ≈ 41 ₴.</div>
+    </div>
+    <div class="toggle-wrap">
+      <span class="toggle-label">Сценарий обработки директа</span>
+      <div class="toggle" id="scenarioToggle">
+        <button data-scenario="slow">Медленный ответ</button>
+        <button data-scenario="fast" class="active">Быстрый ответ (SLA)</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="kpi-grid" id="kpiGrid">
+    <div class="kpi">
+      <div class="label">CPA · цена клиента</div>
+      <div class="value num" id="kpi-cpa">–</div>
+      <div class="sub">Cost Per Acquisition — сколько стоит один оплативший клиент</div>
+      <div class="meter"><div class="meter-track"><div class="meter-fill" id="meter-cpa"></div></div></div>
+    </div>
+    <div class="kpi">
+      <div class="label">LTV · пожизненная ценность</div>
+      <div class="value num" id="kpi-ltv">–</div>
+      <div class="sub">Contribution Value — по марже, не по выручке</div>
+      <div class="meter"><div class="meter-track"><div class="meter-fill" id="meter-ltv"></div></div></div>
+    </div>
+    <div class="kpi">
+      <div class="label">LTV : CAC</div>
+      <div class="value num" id="kpi-ratio">–</div>
+      <div class="sub">Здоровый порог для сервисного бизнеса — от 3.0×</div>
+      <span class="pill" id="kpi-ratio-pill">–</span>
+      <div class="meter"><div class="meter-track"><div class="meter-tick" style="left:60%"></div><div class="meter-fill" id="meter-ratio"></div></div></div>
+    </div>
+    <div class="kpi">
+      <div class="label">Payback‑период</div>
+      <div class="value num" id="kpi-payback">–</div>
+      <div class="sub">Месяцев до возврата CAC из вклада активного клиента</div>
+      <span class="pill" id="kpi-payback-pill">–</span>
+      <div class="meter"><div class="meter-track"><div class="meter-tick" style="left:33.3%"></div><div class="meter-tick" style="left:66.7%"></div><div class="meter-fill" id="meter-payback"></div></div></div>
+    </div>
+    <div class="kpi">
+      <div class="label">ROMI (полный LTV)</div>
+      <div class="value num" id="kpi-romi">–</div>
+      <div class="sub">За 1‑й визит отдельно: <span class="num" id="kpi-romi-m1">–</span> — это нормально, см. инсайт №3</div>
+      <span class="pill" id="kpi-romi-pill">–</span>
+      <div class="meter"><div class="meter-track"><div class="meter-tick" style="left:50%"></div><div class="meter-fill" id="meter-romi"></div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Воронка привлечения клиента</h2>
+      <div class="desc">Бюджет ₴ <span class="num" id="funnel-budget">20 000</span>/мес · CPC <span class="num" id="funnel-cpc">30</span>₴ → ≈<span class="num" id="funnel-impr">44 400</span> показов при CTR <span class="num" id="funnel-ctr">1.5</span>%</div>
+    </div>
+    <div class="funnel">
+      <div class="funnel-note">Меняется вместе со сценарием — переключи тумблер сверху, чтобы увидеть эффект скорости ответа на всю воронку.</div>
+      <div id="funnelRows"></div>
+    </div>
+  </section>
+
+  <section class="two-col">
+    <div class="panel">
+      <h3>Допущения модели</h3>
+      <div class="fine">Можно менять любое значение — всё пересчитывается сразу.</div>
+
+      <div class="group-label">Реклама и обращения</div>
+      <div class="field-row">
+        <div class="row-top"><label>Рекламный бюджет, ₴/мес<span class="tag">оценка под масштаб сети</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-adBudget-r" min="5000" max="60000" value="20000" step="1000">
+          <input type="number" id="in-adBudget" value="20000" step="1000">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>CPC (цена клика), ₴<span class="tag">источник: WordStream + рынок Украины</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-cpc-r" min="10" max="80" value="30" step="1">
+          <input type="number" id="in-cpc" value="30" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>CTR, %<span class="tag">источник: WordStream 2025</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-ctr-r" min="0.5" max="4" value="1.5" step="0.1">
+          <input type="number" id="in-ctr" value="1.5" step="0.1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Клик → сообщение в директ, %<span class="tag">оценка</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-dmRate-r" min="2" max="20" value="8" step="1">
+          <input type="number" id="in-dmRate" value="8" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Директ → запись, %<span class="tag">меняется тумблером, источник: Naiva/LeadResponse</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-bookingRate-r" min="5" max="70" value="42" step="1">
+          <input type="number" id="in-bookingRate" value="42" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Запись → дошёл и оплатил, %<span class="tag">оценка (no‑show)</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-showRate-r" min="60" max="100" value="85" step="1">
+          <input type="number" id="in-showRate" value="85" step="1">
+        </div>
+      </div>
+
+      <div class="group-label">Экономика клиента</div>
+      <div class="field-row">
+        <div class="row-top"><label>Средний чек, ₴<span class="tag">взвешено по прайсу ниже</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-avgCheck-r" min="300" max="900" value="540" step="10">
+          <input type="number" id="in-avgCheck" value="540" step="10">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Маржа вклада, %<span class="tag">после комиссии мастера и расходников</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-margin-r" min="30" max="70" value="52" step="1">
+          <input type="number" id="in-margin" value="52" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Визитов активного клиента / мес<span class="tag">смешанная частота услуг</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-visits-r" min="0.5" max="2.5" value="1.1" step="0.1">
+          <input type="number" id="in-visits" value="1.1" step="0.1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>1‑й → 2‑й визит, %<span class="tag">меняется тумблером, источник: Join Blvd</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-retention-r" min="20" max="70" value="50" step="1">
+          <input type="number" id="in-retention" value="50" step="1">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="row-top"><label>Срок жизни активного клиента, мес<span class="tag">оценка</span></label></div>
+        <div class="row-controls">
+          <input type="range" id="in-lifetime-r" min="3" max="18" value="8" step="1">
+          <input type="number" id="in-lifetime" value="8" step="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Senior‑инсайты модели</h3>
+      <div class="insight-card">
+        <span class="tag-num">1</span><h4>Скорость ответа в директ — это CAC‑рычаг</h4>
+        <p>Конверсия «директ → запись» падает ниже 15% при ответе позже 30 минут и растёт до 35–50% при ответе в течение минуты (рост до 391%). Это буквально снижает CPA без роста рекламного бюджета — переключи тумблер и посмотри на разницу.</p>
+      </div>
+      <div class="insight-card">
+        <span class="tag-num">2</span><h4>LTV считаем по марже, а не по чеку</h4>
+        <p>Джуниорская ошибка — брать в LTV полную выручку. После комиссии мастера (~40%) и расходников (~8%) реальный вклад в прибыль почти в 2 раза ниже среднего чека.</p>
+      </div>
+      <div class="insight-card">
+        <span class="tag-num">3</span><h4>Месяц 1 всегда выглядит убыточно</h4>
+        <p>ROMI по первому визиту почти всегда отрицательный — это нормально для сервиса с повторными визитами. Судить о кампании нужно по LTV, а не по ROI первого месяца, иначе рабочую кампанию закроют как убыточную.</p>
+      </div>
+      <div class="insight-card">
+        <span class="tag-num">4</span><h4>LTV:CAC ниже 3× — сигнал на retention, не на бюджет</h4>
+        <p>Даже в сценарии «быстрый ответ» соотношение около 1.4× — выше нуля, но ниже здорового порога. Дальше рост даёт не реклама, а удержание: абонементы, программа повторного визита (Проект 4), реактивационные кампании (Проект 6).</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Прайс услуг (для среднего чека)</h2><div class="desc">Диапазоны — Киев, якорные точки из открытых прайс‑листов, масштабированы по пропорциям рынка США</div></div>
+    <div class="panel table-wrap">
+      <table>
+        <thead><tr><th>Услуга</th><th>Частота визита</th><th style="text-align:right">Чек, ₴</th></tr></thead>
+        <tbody>
+          <tr><td>Депиляция, ноги полностью</td><td>каждые 4–6 недель</td><td class="price">1 400</td></tr>
+          <tr><td>Депиляция, бикини</td><td>каждые 4–6 недель</td><td class="price">750</td></tr>
+          <tr><td>Депиляция, зона/верхняя губа</td><td>каждые 4–6 недель</td><td class="price">450</td></tr>
+          <tr><td>Ламинирование бровей</td><td>каждые 6–8 недель</td><td class="price">800</td></tr>
+          <tr><td>Тонирование бровей (поддержка)</td><td>каждые 3–4 недели</td><td class="price">300</td></tr>
+          <tr><td>Наращивание ресниц, классика</td><td>полный сет раз в 10–12 недель</td><td class="price">600</td></tr>
+          <tr><td>Наращивание ресниц, объём</td><td>полный сет раз в 10–12 недель</td><td class="price">850</td></tr>
+          <tr><td>Коррекция ресниц (fill)</td><td>каждые 2–3 недели</td><td class="price">300–425</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <strong>Источники и допущения.</strong> Цифры с пометкой «источник» взяты из открытых отраслевых данных 2025–2026: WordStream (Meta/Google Ads Beauty &amp; Personal Care — CPC, CTR, CPL по категории), SBA (норма рекламного бюджета 7–8% от выручки для B2C‑малого бизнеса), Join Blvd (retention 35% на первый повторный визит, 45–70% в среднем по индустрии), Naiva / LeadResponse (эффект скорости ответа в директ на конверсию записи), агрегированные прайс‑листы киевских студий и структура клиентской карты YCLIENTS/Altegio. Цифры с пометкой «оценка» — обоснованные допущения там, где точных публичных данных по украинскому рынку бьюти‑услуг нет; они явно отмечены, а не выданы за подтверждённые факты.
+    <div class="src-grid">
+      <span>· WordStream Advertising Benchmarks 2025/2026</span>
+      <span>· U.S. Small Business Administration — marketing budget guidance</span>
+      <span>· Join Blvd — salon retention benchmarks 2026</span>
+      <span>· Naiva / LeadResponse — response‑speed conversion data 2026</span>
+      <span>· YCLIENTS / Altegio — client‑record schema reference</span>
+    </div>
+    <div style="margin-top:14px;">LUMÉ — вымышленная компания, созданная как часть портфолио маркетолога‑ассистента (проект 1 из 7). Экономика построена на реальных бенчмарках, а не на произвольных числах.</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const ids = ['adBudget','cpc','ctr','dmRate','bookingRate','showRate','avgCheck','margin','visits','retention','lifetime'];
+  const inputs = {};
+  const ranges = {};
+  ids.forEach(id => { inputs[id] = document.getElementById('in-'+id); ranges[id] = document.getElementById('in-'+id+'-r'); });
+
+  function updateFillVar(rangeEl){
+    const min = parseFloat(rangeEl.min), max = parseFloat(rangeEl.max), val = parseFloat(rangeEl.value);
+    const pct = ((val - min) / (max - min)) * 100;
+    rangeEl.style.setProperty('--fill', pct + '%');
+  }
+
+  function setField(id, value){
+    inputs[id].value = value;
+    ranges[id].value = value;
+    updateFillVar(ranges[id]);
+  }
+
+  const scenarios = {
+    slow: { bookingRate: 15, retention: 35 },
+    fast: { bookingRate: 42, retention: 50 }
+  };
+  let currentScenario = 'fast';
+
+  const fmt0 = n => Math.round(n).toLocaleString('uk-UA');
+  const fmt1 = n => (Math.round(n*10)/10).toLocaleString('uk-UA');
+  const pct = n => (Math.round(n*10)/10) + '%';
+
+  const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const anim = {
+    cpa:     {el:'kpi-cpa',     displayed:0, target:0, fmt:v=>fmt0(v)+' ₴'},
+    ltv:     {el:'kpi-ltv',     displayed:0, target:0, fmt:v=>fmt0(v)+' ₴'},
+    ratio:   {el:'kpi-ratio',   displayed:0, target:0, fmt:v=>fmt1(v)+'×'},
+    payback: {el:'kpi-payback', displayed:0, target:0, fmt:v=>fmt1(v)+' мес'},
+    romiFull:{el:'kpi-romi',    displayed:0, target:0, fmt:v=>(v>=0?'+':'')+fmt0(v)+'%'},
+    romiM1:  {el:'kpi-romi-m1', displayed:0, target:0, fmt:v=>(v>=0?'+':'')+fmt0(v)+'%'}
+  };
+  (function tickAnim(){
+    Object.values(anim).forEach(a=>{
+      a.displayed = prefersReduced ? a.target : (Math.abs(a.target-a.displayed)<0.05 ? a.target : a.displayed + (a.target-a.displayed)*0.22);
+      document.getElementById(a.el).textContent = a.fmt(a.displayed);
+    });
+    requestAnimationFrame(tickAnim);
+  })();
+
+  function statusPill(el, level, text){
+    el.textContent = text;
+    el.className = 'pill ' + level;
+  }
+
+  const levelColor = {good:'var(--good)', warning:'var(--warning)', critical:'var(--critical)', neutral:'var(--accent)'};
+  function setMeter(id, value, max, level, min){
+    min = min || 0;
+    const pct = Math.max(3, Math.min(100, ((value - min) / (max - min)) * 100));
+    const el = document.getElementById('meter-'+id);
+    el.style.width = pct + '%';
+    el.style.background = levelColor[level] || levelColor.neutral;
+  }
+
+  function render(){
+    const v = {};
+    ids.forEach(id => v[id] = parseFloat(inputs[id].value) || 0);
+
+    const clicks = v.adBudget / v.cpc;
+    const impressions = clicks / (v.ctr/100);
+    const dms = clicks * v.dmRate/100;
+    const bookings = dms * v.bookingRate/100;
+    const attended = bookings * v.showRate/100;
+    const cpa = attended > 0 ? v.adBudget / attended : 0;
+
+    const contribPerVisit = v.avgCheck * v.margin/100;
+    const ltv = contribPerVisit + (v.retention/100 * v.lifetime * v.visits * contribPerVisit);
+    const ratio = cpa > 0 ? ltv / cpa : 0;
+    const monthlyContrib = v.visits * contribPerVisit;
+    const payback = monthlyContrib > 0 ? cpa / monthlyContrib : 0;
+
+    const romiM1 = v.adBudget > 0 ? ((attended*contribPerVisit - v.adBudget)/v.adBudget)*100 : 0;
+    const romiFull = v.adBudget > 0 ? ((attended*ltv - v.adBudget)/v.adBudget)*100 : 0;
+
+    document.getElementById('kpi-cpa').textContent = fmt0(cpa) + ' ₴';
+    document.getElementById('kpi-ltv').textContent = fmt0(ltv) + ' ₴';
+    document.getElementById('kpi-ratio').textContent = fmt1(ratio) + '×';
+    document.getElementById('kpi-payback').textContent = fmt1(payback) + ' мес';
+    document.getElementById('kpi-romi').textContent = (romiFull>=0?'+':'') + fmt0(romiFull) + '%';
+    document.getElementById('kpi-romi-m1').textContent = (romiM1>=0?'+':'') + fmt0(romiM1) + '%';
+
+    statusPill(document.getElementById('kpi-ratio-pill'),
+      ratio>=3?'good':ratio>=1?'warning':'critical',
+      ratio>=3?'здоровый уровень':ratio>=1?'ниже нормы':'убыточно');
+    statusPill(document.getElementById('kpi-payback-pill'),
+      payback<=6?'good':payback<=12?'warning':'critical',
+      payback<=6?'быстрая окупаемость':payback<=12?'приемлемо':'долго');
+    statusPill(document.getElementById('kpi-romi-pill'),
+      romiFull>=30?'good':romiFull>=0?'warning':'critical',
+      romiFull>=30?'уверенный плюс':romiFull>=0?'на грани':'в минус');
+
+    setMeter('cpa', cpa, 4000, 'neutral');
+    setMeter('ltv', ltv, 2500, 'neutral');
+    setMeter('ratio', ratio, 5, ratio>=3?'good':ratio>=1?'warning':'critical');
+    setMeter('payback', payback, 18, payback<=6?'good':payback<=12?'warning':'critical');
+    setMeter('romi', romiFull, 100, romiFull>=30?'good':romiFull>=0?'warning':'critical', -100);
+
+    document.querySelectorAll('.kpi').forEach(el=>{
+      el.classList.add('flash');
+      clearTimeout(el._flashTimer);
+      el._flashTimer = setTimeout(()=>el.classList.remove('flash'), 250);
+    });
+
+    document.getElementById('funnel-budget').textContent = fmt0(v.adBudget);
+    document.getElementById('funnel-cpc').textContent = fmt0(v.cpc);
+    document.getElementById('funnel-ctr').textContent = v.ctr;
+    document.getElementById('funnel-impr').textContent = fmt0(impressions);
+
+    const stages = [
+      {label:'Клики', small:'по объявлению', value:clicks, base:clicks},
+      {label:'Директ', small:'написали в сообщения', value:dms, base:clicks},
+      {label:'Записи', small:'забронировали визит', value:bookings, base:clicks},
+      {label:'Оплатили', small:'дошли и оплатили', value:attended, base:clicks}
+    ];
+    const shades = ['#c98cae','#a85e8a','#8a4770','#7c3a63'];
+    const shadesDark = ['#f2c9dd','#eaaacb','#eb96bf','#e59cc0'];
+    const isDark = matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.getAttribute('data-theme')!=='light' || document.documentElement.getAttribute('data-theme')==='dark';
+    const palette = isDark ? shadesDark : shades;
+
+    let prev = clicks;
+    const rows = stages.map((s,i)=>{
+      const widthPct = Math.max(2, (s.value / clicks) * 100);
+      const conv = i===0 ? null : (prev>0 ? (s.value/prev)*100 : 0);
+      const convHtml = conv===null ? '' : `<div class="conv">конверсия ${pct(conv)}</div>`;
+      prev = s.value;
+      return `<div class="funnel-row">
+        <div class="stage-label">${s.label}<small>${s.small}</small></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${widthPct}%;background:${palette[i]}"></div></div>
+        <div class="stats"><div class="n num">${fmt0(s.value)}</div>${convHtml}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('funnelRows').innerHTML = rows;
+  }
+
+  ids.forEach(id => {
+    updateFillVar(ranges[id]);
+    inputs[id].addEventListener('input', () => { ranges[id].value = inputs[id].value; updateFillVar(ranges[id]); render(); });
+    ranges[id].addEventListener('input', () => { inputs[id].value = ranges[id].value; updateFillVar(ranges[id]); render(); });
+  });
+
+  document.getElementById('scenarioToggle').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    currentScenario = btn.dataset.scenario;
+    document.querySelectorAll('#scenarioToggle button').forEach(b=>b.classList.toggle('active', b===btn));
+    setField('bookingRate', scenarios[currentScenario].bookingRate);
+    setField('retention', scenarios[currentScenario].retention);
+    render();
+  });
+
+  render();
+})();
+</script>

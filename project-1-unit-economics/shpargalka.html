@@ -1,0 +1,103 @@
+<title>LUMÉ Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{
+    --bg:#f3eeec; --surface:#ffffff; --surface-sunken:#ece5e2;
+    --ink:#241f22; --ink-muted:#6b5c61; --ink-faint:#9a8b8f; --line:#e0d5d1;
+    --accent:#7c3a63; --accent-ink:#ffffff; --accent-soft:#f2dfe9;
+    --shadow: 0 1px 2px rgba(36,31,34,.06), 0 8px 24px -12px rgba(36,31,34,.18);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+      --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+      --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+    --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+    --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .page{max-width:720px;margin:0 auto;padding:44px 24px 80px;}
+  h1,h2,h3{text-wrap:balance;margin:0;}
+  a{color:var(--accent);}
+  .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2rem;color:var(--accent);}
+  header{padding-bottom:24px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  header p{max-width:56ch;color:var(--ink-muted);font-size:.95rem;line-height:1.6;margin-top:10px;}
+
+  .note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px;font-size:.85rem;color:var(--ink-muted);line-height:1.6;margin-bottom:28px;}
+  .quote{background:var(--accent-soft);border-radius:var(--radius);padding:20px 22px;margin-bottom:36px;box-shadow:var(--shadow);}
+  .quote .eyebrow{color:var(--accent);margin-bottom:8px;display:block;}
+  .quote p{margin:0;font-size:.92rem;line-height:1.65;color:var(--ink);font-style:italic;}
+
+  .qa{display:flex;flex-direction:column;}
+  .qa-item{padding:20px 0;}
+  .qa-item + .qa-item{border-top:1px solid var(--line);}
+  .qa-item .tag{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:700;margin-right:10px;flex:none;}
+  .qa-item h3{display:inline;font-size:.98rem;font-weight:600;}
+  .qa-item .q-row{display:flex;align-items:baseline;}
+  .qa-item p{margin:10px 0 0 34px;font-size:.88rem;color:var(--ink-muted);line-height:1.65;max-width:60ch;}
+
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-size:.78rem;color:var(--ink-faint);line-height:1.6;}
+</style>
+
+<div class="page">
+  <header>
+    <span class="wordmark">LUMÉ</span>
+    <div class="eyebrow" style="margin-top:10px;">Проект 1 · Юнит‑экономика</div>
+    <h1 style="font-size:1.4rem;font-weight:700;margin-top:6px;">Шпаргалка для собеседования</h1>
+    <p>Короткий формат. Не заучивай ответы дословно — вопрос могут задать другими словами. Пойми логику один раз — и ответишь на любую формулировку. Полный разбор с объяснением каждой цифры — в <a href="deep-dive.html">глубоком разборе</a>, сама модель — <a href="index.html">здесь</a>.</p>
+  </header>
+
+  <div class="quote">
+    <span class="eyebrow">«А как ты это делала?»</span>
+    <p>Я строила модель вместе с ИИ‑инструментом (Claude) — но сама решала, какие метрики считать и почему, проверяла цифры по реальным отраслевым источникам (WordStream, SBA, исследования по ритеншну в бьюти‑индустрии), и сама выбирала, какие сценарии показать. ИИ помог быстро собрать интерактивный расчёт и оформить его. Но логику — почему LTV считаем по марже, а не по чеку, почему скорость ответа в директ так сильно двигает всю экономику — я разбирала и проверяла сама. Я специально сделала сравнение «медленный / быстрый ответ», потому что это самый практичный вывод для реального бизнеса. Использовать ИИ как инструмент — это нормально, как раньше пользовались Excel; важно, что я понимаю, что стоит за цифрами, а не кто нарисовал слайдер.</p>
+  </div>
+
+  <div class="note">8 вопросов, которые вероятнее всего зададут — и короткие ответы простым языком.</div>
+
+  <div class="qa">
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">1</span><h3>Что такое CPA и как вы его посчитали?</h3></div>
+      <p>CPA (Cost Per Acquisition) — сколько стоит привлечь одного оплатившего клиента. Рекламный бюджет делим на число клиентов, дошедших до оплаты после всей воронки: клик → директ → запись → визит.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">2</span><h3>Почему LTV считается по марже, а не по чеку?</h3></div>
+      <p>Чек — это деньги клиента, а не деньги компании. Из чека мастер забирает комиссию (~40%), ещё уходит на расходники (~8%). Реальная прибыль — маржа вклада (~52% от чека). Считать LTV по чеку — классическая ошибка новичка.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">3</span><h3>Что такое LTV:CAC и откуда порог 3x?</h3></div>
+      <p>Соотношение «сколько клиент принёс» к «сколько стоило его привлечь». Правило «минимум 3x» — из венчурной/SaaS‑индустрии, но логика универсальна: нужен запас на аренду, зарплаты, форс‑мажоры. Для локального сервиса это разумный ориентир, а не строгий закон.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">4</span><h3>Откуда цифры — вы их выдумали?</h3></div>
+      <p>Нет. Цены — из открытых прайсов киевских студий и пропорций рынка США. CPC/CTR — из отчётов WordStream. Ритеншн (35% / 50% / 45–70%) — из исследования Join Blvd. Эффект скорости ответа — из данных Naiva/LeadResponse. Часть цифр — обоснованная оценка, явно помеченная как оценка, а не факт.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">5</span><h3>Почему ROI за первый месяц отрицательный — это провал?</h3></div>
+      <p>Нет, это нормально для сервиса с повторными визитами. В первый месяц вы платите за привлечение, а прибыль с клиента размазана на визиты вперёд. Судить нужно по LTV, а не по первому месяцу.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">6</span><h3>Зачем payback‑период, если уже есть LTV:CAC?</h3></div>
+      <p>LTV:CAC отвечает «выгодно ли в принципе», payback — «как быстро вернутся деньги». Кампания может быть выгодной по ratio, но с payback в 18 месяцев — и тогда её нечем финансировать при ограниченном кэше.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">7</span><h3>Как скорость ответа в директ влияет на расчёт?</h3></div>
+      <p>Конверсия «директ → запись» падает ниже 15% при ответе позже 30 минут и растёт до 35–50% при ответе за минуту. Это меняет CPA и ретеншн одновременно — один операционный процесс двигает экономику сильнее, чем рост бюджета.</p>
+    </div>
+    <div class="qa-item">
+      <div class="q-row"><span class="tag">8</span><h3>Если бюджет вырастет вдвое, что будет с CPA?</h3></div>
+      <p>В модели — почти ничего, все конверсии заданы в процентах. В реальности CPA обычно растёт («выжигание» дешёвой аудитории первой) — модель это не учитывает, и это честно можно назвать её ограничением.</p>
+    </div>
+  </div>
+
+  <footer>LUMÉ — вымышленная компания, часть портфолио маркетолога‑ассистента (проект 1 из 7). Смотри также интерактивную модель и полный разбор допущений.</footer>
+</div>

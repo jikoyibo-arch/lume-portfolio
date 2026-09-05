@@ -1,0 +1,203 @@
+<title>LUMÉ Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{
+    --bg:#f3eeec; --surface:#ffffff; --surface-sunken:#ece5e2;
+    --ink:#241f22; --ink-muted:#6b5c61; --ink-faint:#9a8b8f; --line:#e0d5d1;
+    --accent:#7c3a63; --accent-ink:#ffffff; --accent-soft:#f2dfe9;
+    --shadow: 0 1px 2px rgba(36,31,34,.06), 0 8px 24px -12px rgba(36,31,34,.18);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+      --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+      --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1a1618; --surface:#231e21; --surface-sunken:#2c2528;
+    --ink:#f3eae8; --ink-muted:#bfaeb1; --ink-faint:#8a7b7e; --line:#3a3235;
+    --accent:#e59cc0; --accent-ink:#2a1420; --accent-soft:#3a2431;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .page{max-width:760px;margin:0 auto;padding:44px 24px 90px;}
+  h1,h2,h3{text-wrap:balance;margin:0;}
+  a{color:var(--accent);}
+  .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2rem;color:var(--accent);}
+  header{padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--line);}
+  header p{max-width:60ch;color:var(--ink-muted);font-size:.95rem;line-height:1.6;margin-top:10px;}
+
+  nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:40px;}
+  nav.toc .eyebrow{margin-bottom:10px;display:block;}
+  nav.toc ol{margin:0;padding-left:1.1em;columns:2;column-gap:24px;}
+  nav.toc li{font-size:.83rem;margin-bottom:7px;break-inside:avoid;}
+  nav.toc a{color:var(--ink);text-decoration:none;}
+  nav.toc a:hover{color:var(--accent);}
+  @media (max-width:560px){nav.toc ol{columns:1;}}
+
+  article section{margin-bottom:34px;scroll-margin-top:20px;}
+  article h2{font-size:1.15rem;font-weight:700;color:var(--accent);margin-bottom:12px;}
+  article h2 .n{font-family:'IBM Plex Mono',monospace;color:var(--ink-faint);font-weight:500;margin-right:8px;}
+  article p{max-width:64ch;font-size:.92rem;line-height:1.7;color:var(--ink);margin:0 0 12px;}
+  article p.muted{color:var(--ink-muted);}
+  article ul{max-width:64ch;padding-left:1.2em;margin:0 0 12px;}
+  article li{font-size:.92rem;line-height:1.7;margin-bottom:6px;}
+
+  .callout{background:var(--accent-soft);border-radius:var(--radius);padding:20px 22px;margin:16px 0;}
+  .callout p{color:var(--ink);margin:0;max-width:60ch;}
+  .callout .eyebrow{color:var(--accent);display:block;margin-bottom:8px;}
+
+  .term-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.88rem;}
+  .term-table td{padding:8px 12px 8px 0;vertical-align:top;border-bottom:1px solid var(--line);}
+  .term-table td:first-child{font-weight:600;white-space:nowrap;color:var(--accent);}
+
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-size:.78rem;color:var(--ink-faint);line-height:1.6;}
+</style>
+
+<div class="page">
+  <header>
+    <span class="wordmark">LUMÉ</span>
+    <div class="eyebrow" style="margin-top:10px;">Проект 1 · Юнит‑экономика</div>
+    <h1 style="font-size:1.4rem;font-weight:700;margin-top:6px;">Глубокий разбор — полное понимание модели</h1>
+    <p>Цель — не выучить ответы, а разобраться так, чтобы отвечать на вопросы, которых тут вообще нет, потому что понимаешь логику, а не текст. Читай не за один присест — раздели на 2–3 захода.</p>
+  </header>
+
+  <nav class="toc">
+    <span class="eyebrow">Содержание</span>
+    <ol>
+      <li><a href="#s1">Зачем нужна юнит‑экономика</a></li>
+      <li><a href="#s2">Воронка: почему 4 шага</a></li>
+      <li><a href="#s3">CPA — не просто деление</a></li>
+      <li><a href="#s4">LTV — не «вся жизнь»</a></li>
+      <li><a href="#s5">Маржа vs выручка vs прибыль</a></li>
+      <li><a href="#s6">LTV:CAC и правило 3x</a></li>
+      <li><a href="#s7">Payback‑период</a></li>
+      <li><a href="#s8">ROMI, ROI, ROAS</a></li>
+      <li><a href="#s9">Скорость ответа — главный рычаг</a></li>
+      <li><a href="#s10">Аналогия: дырявое ведро</a></li>
+      <li><a href="#s11">Типичные ошибки джуниора</a></li>
+      <li><a href="#s12">Как считать «а что если» самой</a></li>
+      <li><a href="#s13">Ограничения модели</a></li>
+    </ol>
+  </nav>
+
+  <article>
+    <section id="s1">
+      <h2><span class="n">01</span>Зачем вообще нужна юнит‑экономика</h2>
+      <p>«Юнит» (unit) — это один клиент. Юнит‑экономика отвечает на один вопрос: приносит ли компании прибыль КАЖДЫЙ ОТДЕЛЬНЫЙ клиент, а не бизнес в целом. Это принципиально другой взгляд, чем «сколько всего заработали за месяц» — можно расти по выручке и одновременно разоряться, если каждый новый клиент стоит дороже, чем приносит.</p>
+      <p class="muted">Поэтому маркетолог думает не «сколько потратили на рекламу», а «сколько стоил один клиент и сколько денег он принесёт». Всё остальное в этом документе — просто способ аккуратно посчитать эти два числа и сравнить их.</p>
+    </section>
+
+    <section id="s2">
+      <h2><span class="n">02</span>Воронка: почему 4 шага, а не один процент</h2>
+      <p>Junior‑подход — взять одно число «конверсия из рекламы в продажу». Проблема: в нём смешаны 4 разных процесса, каждый со своей причиной и своим способом исправления:</p>
+      <ul>
+        <li><strong>Клик по рекламе</strong> — зависит от креатива и таргетинга.</li>
+        <li><strong>Клик → директ</strong> — зависит от того, насколько понятен оффер.</li>
+        <li><strong>Директ → запись</strong> — зависит от того, КАК и КОГДА отвечает человек (самый мощный рычаг, см. §9).</li>
+        <li><strong>Запись → пришёл и оплатил</strong> — зависит от операционки: напоминания, удобство переноса.</li>
+      </ul>
+      <p class="muted">Если считать одним числом — невозможно понять, ЧТО чинить, когда конверсия упала. Разбивка — диагностический инструмент, а не усложнение ради усложнения.</p>
+    </section>
+
+    <section id="s3">
+      <h2><span class="n">03</span>CPA — не просто «потратили ÷ купили»</h2>
+      <p>CPA (Cost Per Acquisition) — результат перемножения всех 4 конверсий по цепочке. Бюджет 20 000 ₴, CPC 30 ₴ → кликов ≈ 667. Из них часть пишет в директ (8%), из них часть записывается (15% или 42% — по сценарию), из них часть доходит и платит (85%). CPA — бюджет, поделённый на итоговое число реально заплативших людей.</p>
+      <p class="muted">CPA — не «правда о мире», а функция от предположений: перемножение процентов даёт нелинейный эффект, поэтому маленькое изменение на входе (скорость ответа) даёт большое изменение на выходе.</p>
+    </section>
+
+    <section id="s4">
+      <h2><span class="n">04</span>LTV — почему «пожизненная» не значит «всю жизнь»</h2>
+      <p>LTV (Lifetime Value) звучит как «сколько клиент принесёт за всю жизнь», но реально это статистическое ожидание на основе двух вещей: как часто клиент приходит и как долго остаётся активным, прежде чем перестанет (churn).</p>
+      <p>Клиент точно приносит деньги за первый визит. А дальше — не факт, что вернётся: только 35–50% доходят до второго визита. Только эта часть начинает «копить» дальнейшую ценность — за счёт частоты визитов (~1.1/мес) и срока активности (~8 месяцев — оценка).</p>
+      <div class="callout"><span class="eyebrow">Формула</span><p>вклад с первого визита + (вероятность стать активным × месяцев активен × визитов/мес × вклад с визита). Это взвешенное среднее с учётом того, что не все клиенты одинаковые.</p></div>
+    </section>
+
+    <section id="s5">
+      <h2><span class="n">05</span>Маржа вклада vs выручка vs прибыль</h2>
+      <p>Здесь путаются почти все новички — разбираем медленно:</p>
+      <table class="term-table">
+        <tr><td>Выручка</td><td>весь чек клиента, например 540 ₴</td></tr>
+        <tr><td>Маржа вклада</td><td>остаётся после прямых затрат (комиссия мастера, расходники), ДО постоянных расходов — в модели ~52% чека, ~281 ₴</td></tr>
+        <tr><td>Чистая прибыль</td><td>остаётся после ВСЕХ расходов бизнеса (аренда, зарплаты, налоги) — это уже не задача юнит‑экономики</td></tr>
+      </table>
+      <p class="muted">Для маркетинговых решений правильно использовать маржу вклада — единственное число, которое реально «прирастает» из‑за конкретно этого клиента. Считать по выручке — заявлять, что каждая гривна чека — прибыль, что неправда.</p>
+    </section>
+
+    <section id="s6">
+      <h2><span class="n">06</span>LTV:CAC — правило 3x и почему это не закон физики</h2>
+      <p>Правило «здоровое соотношение — от 3x» — из венчурного/SaaS‑мира: инвесторам нужен запас минимум 3‑кратный, чтобы покрыть расходы, которые НЕ входят в CAC — аренду, зарплаты, поддержку, налоги. Это эмпирическое правило, а не математическая формула.</p>
+      <p class="muted">Для локального сервиса (LUMÉ) правило переносится не идеально, но логика («1x — это работа в ноль, а не в плюс») остаётся верной. В модели ratio ~1.4x в лучшем сценарии — честный, не приукрашенный результат.</p>
+    </section>
+
+    <section id="s7">
+      <h2><span class="n">07</span>Payback‑период — второе измерение, о котором забывают</h2>
+      <p>LTV:CAC — про «в итоге выгодно или нет». Payback — про «хватит ли денег дожить до этого итога». Кампания может быть выгодной по LTV:CAC (5x), но окупаться 20 месяцев — если у бизнеса нет 20 месяцев свободного кэша, он обанкротится ДО получения выгоды, даже если на бумаге всё отлично.</p>
+    </section>
+
+    <section id="s8">
+      <h2><span class="n">08</span>ROMI, ROI, ROAS — три термина, которые все путают</h2>
+      <table class="term-table">
+        <tr><td>ROI</td><td>общий термин «возврат на любые инвестиции», не только маркетинг</td></tr>
+        <tr><td>ROMI</td><td>то же самое, но конкретно про маркетинговые вложения</td></tr>
+        <tr><td>ROAS</td><td>считается по ВЫРУЧКЕ, не по прибыли — самый простой и самый обманчивый показатель</td></tr>
+      </table>
+      <p class="muted">В модели используется ROMI по марже вклада — честная версия, показывающая реальную прибыльность, а не только оборот.</p>
+    </section>
+
+    <section id="s9">
+      <h2><span class="n">09</span>Самый дорогой инсайт модели: скорость ответа</h2>
+      <p>КАК БЫСТРО отвечает человек в директе — один из самых сильных рычагов во всей модели, сильнее размера рекламного бюджета. Ответ позже 30 минут → конверсия ниже 15%. Ответ за минуту → 35–50% (рост до 391%).</p>
+      <p class="muted">Человек, написавший в директ, находится в моменте максимального интереса — без быстрого ответа внимание переключается на что‑то другое. Это психология момента принятия решения, а не про рекламу вообще. Прямая связь с будущим Проектом 4 (маршрутизация обращений и SLA).</p>
+    </section>
+
+    <section id="s10">
+      <h2><span class="n">10</span>Аналогия: дырявое ведро</h2>
+      <div class="callout">
+        <span class="eyebrow">Чтобы легло в голову раз и навсегда</span>
+        <p>Бизнес — ведро с водой. Реклама — кран сверху (новые клиенты). В дне ведра — дырки: клиенты, которые уходят (churn). Если дырки большие (низкий ритеншн), можно лить сколько угодно воды — уровень почти не растёт, всё вытекает снизу. Junior видит пустое ведро и говорит «нужен кран посильнее» (больше бюджета). Senior сначала смотрит на дно: латает дырки (улучшает ретеншн), а потом увеличивает поток.</p>
+      </div>
+    </section>
+
+    <section id="s11">
+      <h2><span class="n">11</span>Типичные ошибки джуниора</h2>
+      <ul>
+        <li>Считать LTV по выручке — она первая на виду в отчётах, а маржу нужно специально считать.</li>
+        <li>Судить о кампании по первому месяцу — отчёты помесячные, хочется быстрого «сработало / нет».</li>
+        <li>Смотреть только на один сценарий — строить один проще, чем два.</li>
+        <li>Верить, что рост бюджета линейно даёт рост клиентов — реклама работает с уменьшающейся отдачей.</li>
+      </ul>
+    </section>
+
+    <section id="s12">
+      <h2><span class="n">12</span>Как самой прикидывать «а что если»</h2>
+      <p>Если спросят про сценарий, которого нет в модели — пересчитай логику вслух:</p>
+      <ul>
+        <li>Конверсия где‑то падает → CPA растёт (меньше платящих на тот же бюджет).</li>
+        <li>Retention растёт → LTV растёт, и LTV:CAC улучшается сразу по двум причинам.</li>
+        <li>Средний чек растёт → растёт вклад с визита и LTV, но CPA не меняется.</li>
+        <li>Бюджет растёт → клиентов больше пропорционально, CPA в модели тот же (модель не учитывает выжигание аудитории).</li>
+      </ul>
+    </section>
+
+    <section id="s13">
+      <h2><span class="n">13</span>Ограничения модели — скажи это сама, до того как спросят</h2>
+      <p class="muted">Хорошего специалиста отличает не «модель без изъянов», а честное понимание её границ:</p>
+      <ul>
+        <li>Не учитывает рост CPA при увеличении бюджета (в реальности он обычно растёт).</li>
+        <li>Часть цифр (no‑show 15%, клик→директ 8%, срок жизни 8 месяцев) — обоснованные оценки, не подтверждённые факты по украинскому рынку.</li>
+        <li>Считает «среднего» клиента — в реальности сегменты очень разные.</li>
+        <li>Не учитывает сезонность (весенний всплеск на депиляцию, спад в ноябре).</li>
+      </ul>
+      <div class="callout"><p>Проговорить это самой на собеседовании — сильный ход: показывает, что ты понимаешь модель, а не просто веришь цифрам на экране.</p></div>
+    </section>
+  </article>
+
+  <footer>LUMÉ — вымышленная компания, часть портфолио маркетолога‑ассистента (проект 1 из 7). Смотри также <a href="index.html">интерактивную модель</a> и <a href="shpargalka.html">короткую шпаргалку</a>. Все проекты — <a href="../">на главной портфолио</a>.</footer>
+</div>
