@@ -1,0 +1,99 @@
+<title>LUMÉ Competitors Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{--bg:#f3eeec;--surface:#ffffff;--ink:#241f22;--ink-muted:#6b5c61;--ink-faint:#9a8b8f;--line:#e0d5d1;--accent:#7c3a63;--accent-soft:#f2dfe9;--shadow:0 1px 2px rgba(36,31,34,.06),0 8px 24px -12px rgba(36,31,34,.18);--radius:14px;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a1618;--surface:#231e21;--ink:#f3eae8;--ink-muted:#bfaeb1;--ink-faint:#8a7b7e;--line:#3a3235;--accent:#e59cc0;--accent-soft:#3a2431;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);}}
+  :root[data-theme="dark"]{--bg:#1a1618;--surface:#231e21;--ink:#f3eae8;--ink-muted:#bfaeb1;--ink-faint:#8a7b7e;--line:#3a3235;--accent:#e59cc0;--accent-soft:#3a2431;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .page{max-width:760px;margin:0 auto;padding:44px 24px 90px;}
+  h1,h2{margin:0;text-wrap:balance;}
+  a{color:var(--accent);}
+  .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2rem;color:var(--accent);}
+  header{padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--line);}
+  header p{max-width:60ch;color:var(--ink-muted);font-size:.95rem;line-height:1.6;margin-top:10px;}
+  nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin-bottom:40px;}
+  nav.toc .eyebrow{margin-bottom:10px;display:block;}
+  nav.toc ol{margin:0;padding-left:1.1em;columns:2;column-gap:24px;}
+  nav.toc li{font-size:.83rem;margin-bottom:7px;break-inside:avoid;}
+  nav.toc a{color:var(--ink);text-decoration:none;}
+  nav.toc a:hover{color:var(--accent);}
+  @media (max-width:560px){nav.toc ol{columns:1;}}
+  article section{margin-bottom:34px;scroll-margin-top:20px;}
+  article h2{font-size:1.15rem;font-weight:700;color:var(--accent);margin-bottom:12px;}
+  article h2 .n{font-family:'IBM Plex Mono',monospace;color:var(--ink-faint);font-weight:500;margin-right:8px;}
+  article p{max-width:64ch;font-size:.92rem;line-height:1.7;color:var(--ink);margin:0 0 12px;}
+  article p.muted{color:var(--ink-muted);}
+  article ul{max-width:64ch;padding-left:1.2em;margin:0 0 12px;}
+  article li{font-size:.92rem;line-height:1.7;margin-bottom:6px;}
+  .callout{background:var(--accent-soft);border-radius:var(--radius);padding:20px 22px;margin:16px 0;}
+  .callout p{color:var(--ink);margin:0;max-width:60ch;}
+  .callout .eyebrow{color:var(--accent);display:block;margin-bottom:8px;}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-size:.78rem;color:var(--ink-faint);line-height:1.6;}
+</style>
+<div class="page">
+  <header>
+    <span class="wordmark">LUMÉ</span>
+    <div class="eyebrow" style="margin-top:10px;">Проект 2 · Анализ конкурентов</div>
+    <h1 style="font-size:1.4rem;font-weight:700;margin-top:6px;">Глубокий разбор — полное понимание</h1>
+    <p>Цель — понять логику настолько, чтобы уверенно продолжить анализ даже про конкурента, которого здесь нет.</p>
+  </header>
+
+  <nav class="toc">
+    <span class="eyebrow">Содержание</span>
+    <ol>
+      <li><a href="#s1">Зачем нужен конкурентный анализ</a></li>
+      <li><a href="#s2">Почему 4–5 архетипов</a></li>
+      <li><a href="#s3">Mystery shopping подробно</a></li>
+      <li><a href="#s4">От находки к действию</a></li>
+      <li><a href="#s5">Аналогия: карта поля боя</a></li>
+      <li><a href="#s6">Типичные ошибки джуниора</a></li>
+      <li><a href="#s7">Как расширять анализ самой</a></li>
+      <li><a href="#s8">Ограничения анализа</a></li>
+    </ol>
+  </nav>
+
+  <article>
+    <section id="s1"><h2><span class="n">01</span>Зачем вообще нужен конкурентный анализ</h2>
+      <p>Он существует, чтобы отвечать на 3 конкретных вопроса: где мы теряем клиентов, которые могли бы быть нашими; что можно адаптировать быстрее, чем изобретать самим; и где на рынке свободное место, которое пока никто не занял.</p>
+      <p class="muted">Если анализ не отвечает хотя бы на один из этих вопросов — это не анализ, а коллекция скриншотов.</p>
+    </section>
+    <section id="s2"><h2><span class="n">02</span>Почему 4–5 архетипов, а не один список</h2>
+      <p>Разные типы конкурентов отбирают клиентов по разным причинам: прямой — операционным качеством, аспирационный — статусом, бюджетный — ценой и удобством, неформальный — личными отношениями, косвенный — более широким пакетом.</p>
+      <p class="muted">Деление на архетипы — способ понять, КАКИМ оружием отвечать каждому, а не бюрократия.</p>
+    </section>
+    <section id="s3"><h2><span class="n">03</span>Mystery shopping — методология подробно</h2>
+      <p>Это когда сам обращаешься к компании под видом клиента, чтобы честно замерить реальный процесс, а не то, что написано в рекламе. Для честного замера: пиши всем в одно время суток, задавай нейтральный вопрос, фиксируй не только время ответа, но и качество (предложили ли записаться сразу, был ли тон дружелюбным).</p>
+      <div class="callout"><p>Именно этот метод вскрыл главный инсайт: ни один конкурент не отвечает быстрее 3 минут — а по данным Проекта 1, ответ за минуту даёт кратный рост конверсии. Без mystery shopping это было бы неизвестно.</p></div>
+    </section>
+    <section id="s4"><h2><span class="n">04</span>Как связывать находки с действиями</h2>
+      <p>Самая частая причина, почему конкурентный анализ превращается в папку скриншотов — находки не привязаны к владельцу и сроку. Правильная связка: находка → куда идёт → кто отвечает → к какому сроку. В LUMÉ находки попадают в общий отчёт (Проект 3), а из «Возможностей» конкретные пункты становятся входом для Проекта 6 (кампании) и Проекта 4 (коммуникации).</p>
+    </section>
+    <section id="s5"><h2><span class="n">05</span>Аналогия: карта поля боя</h2>
+      <div class="callout"><p>Представь анализ не как список имён, а как карту поля боя: важно не «сколько солдат у противника», а каким оружием вооружён каждый отряд. Прямой конкурент атакует в лоб тем же оружием. Аспирационный — статусом, с фланга. Неформальный — партизанскими методами (личными связями), которые сеть не может скопировать, только компенсировать другим оружием — системой.</p></div>
+    </section>
+    <section id="s6"><h2><span class="n">06</span>Типичные ошибки джуниора</h2>
+      <ul>
+        <li>Сравнивать только цену — она проще всего находится, хотя решение клиента редко определяется только ей.</li>
+        <li>Делать анализ один раз и класть в стол — рынок меняется каждую неделю.</li>
+        <li>Игнорировать неформальных конкурентов — у них нет сайта, который легко нагуглить, но они реально отбирают клиентов.</li>
+        <li>Копировать тактику буквально, не проверив, подходит ли она собственной бизнес-модели.</li>
+      </ul>
+    </section>
+    <section id="s7"><h2><span class="n">07</span>Как самой расширять этот анализ</h2>
+      <p>Если появится новый игрок — три вопроса по порядку: (1) в какой архетип он попадает и почему; (2) что он предлагает такого, чего нет у остальных; (3) стоит ли включать его в ежемесячный mystery shopping, или он слишком мал, чтобы тратить на него цикл проверки.</p>
+    </section>
+    <section id="s8"><h2><span class="n">08</span>Ограничения этого анализа — скажи это сама</h2>
+      <ul>
+        <li>Конкуренты и данные — вымышленные (это портфолио).</li>
+        <li>Анализ не включает финансовое состояние конкурентов — это недоступная информация без инсайдерских данных.</li>
+        <li>SWOT составлен на срезе одного момента времени — отсюда регламент ежемесячного/ежеквартального обновления.</li>
+        <li>Пять архетипов покрывают типичный рынок, но не гарантируют отсутствие принципиально новой бизнес-модели в будущем.</li>
+      </ul>
+    </section>
+  </article>
+
+  <footer>LUMÉ — вымышленная компания, часть портфолио (проект 2 из 7). Смотри также <a href="index.html">трекер конкурентов</a> и <a href="shpargalka.html">шпаргалку</a>. <a href="../">Все проекты</a>.</footer>
+</div>

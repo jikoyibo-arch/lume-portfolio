@@ -1,0 +1,52 @@
+<title>LUMÉ Competitors Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap">
+<style>
+  :root{--bg:#f3eeec;--surface:#ffffff;--ink:#241f22;--ink-muted:#6b5c61;--ink-faint:#9a8b8f;--line:#e0d5d1;--accent:#7c3a63;--accent-soft:#f2dfe9;--shadow:0 1px 2px rgba(36,31,34,.06),0 8px 24px -12px rgba(36,31,34,.18);--radius:14px;}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1a1618;--surface:#231e21;--ink:#f3eae8;--ink-muted:#bfaeb1;--ink-faint:#8a7b7e;--line:#3a3235;--accent:#e59cc0;--accent-soft:#3a2431;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);}}
+  :root[data-theme="dark"]{--bg:#1a1618;--surface:#231e21;--ink:#f3eae8;--ink-muted:#bfaeb1;--ink-faint:#8a7b7e;--line:#3a3235;--accent:#e59cc0;--accent-soft:#3a2431;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .page{max-width:720px;margin:0 auto;padding:44px 24px 80px;}
+  h1,h3{margin:0;text-wrap:balance;}
+  a{color:var(--accent);}
+  .eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;}
+  .wordmark{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:2rem;color:var(--accent);}
+  header{padding-bottom:24px;margin-bottom:28px;border-bottom:1px solid var(--line);}
+  header p{max-width:56ch;color:var(--ink-muted);font-size:.95rem;line-height:1.6;margin-top:10px;}
+  .quote{background:var(--accent-soft);border-radius:var(--radius);padding:20px 22px;margin-bottom:36px;box-shadow:var(--shadow);}
+  .quote .eyebrow{color:var(--accent);margin-bottom:8px;display:block;}
+  .quote p{margin:0;font-size:.92rem;line-height:1.65;color:var(--ink);font-style:italic;}
+  .qa-item{padding:20px 0;}
+  .qa-item + .qa-item{border-top:1px solid var(--line);}
+  .qa-item .tag{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:.72rem;font-weight:700;margin-right:10px;flex:none;}
+  .qa-item h3{display:inline;font-size:.98rem;font-weight:600;}
+  .qa-item .q-row{display:flex;align-items:baseline;}
+  .qa-item p{margin:10px 0 0 34px;font-size:.88rem;color:var(--ink-muted);line-height:1.65;max-width:60ch;}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-size:.78rem;color:var(--ink-faint);line-height:1.6;}
+</style>
+<div class="page">
+  <header>
+    <span class="wordmark">LUMÉ</span>
+    <div class="eyebrow" style="margin-top:10px;">Проект 2 · Анализ конкурентов</div>
+    <h1 style="font-size:1.4rem;font-weight:700;margin-top:6px;">Шпаргалка для собеседования</h1>
+    <p>Короткий формат. Полный разбор — в <a href="deep-dive.html">глубоком разборе</a>, сам трекер — <a href="index.html">здесь</a>.</p>
+  </header>
+
+  <div class="quote">
+    <span class="eyebrow">«А как ты это делала?»</span>
+    <p>Я строила трекер конкурентов вместе с ИИ-инструментом, но структуру решала сама: разделила конкурентов на 4 архетипа (прямые, аспирационные, бюджетные, неформальные), потому что с каждым нужно бороться по-разному. Ключевую идею — mystery shopping — я взяла из того, что уже узнала при разборе юнит-экономики: скорость ответа сильнее всего двигает конверсию. Я специально связала эти два проекта, а не сделала их отдельными кусками.</p>
+  </div>
+
+  <div class="qa">
+    <div class="qa-item"><div class="q-row"><span class="tag">1</span><h3>Зачем делить конкурентов на сегменты?</h3></div><p>Сетевой конкурент, премиум-монобренд и соло-мастер конкурируют разными способами — ценой, доверием или личными отношениями. Один и тот же ответ подходит не всем.</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">2</span><h3>Что такое mystery shopping?</h3></div><p>Пишешь конкуренту под видом клиента, чтобы честно замерить его реальный сервис — конкуренты не публикуют скорость своего ответа сами.</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">3</span><h3>Почему скорость ответа — это конкурентный анализ, а не операционка?</h3></div><p>Если никто не отвечает быстрее 3 минут, а мы отвечаем за минуту — это свободная рыночная ниша, которую можно явно продавать клиенту.</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">4</span><h3>Конкуренты реальные?</h3></div><p>Нет, вымышленные — это портфолио. Но архетипы и паттерны (цены, каналы, скорость ответа) реалистичны для рынка Киева.</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">5</span><h3>Как часто обновлять?</h3></div><p>Еженедельно — креативы конкурентов. Ежемесячно — mystery shopping. Ежеквартально — полный пересмотр цен и SWOT.</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">6</span><h3>Что реально внедрить у LUMÉ?</h3></div><p>SLA на ответ до 1 минуты, комбо-пакеты услуг (как у Belle Époque), присутствие в Google Maps/отзывах (как у EasyWax).</p></div>
+    <div class="qa-item"><div class="q-row"><span class="tag">7</span><h3>Разница между угрозой и слабой стороной в SWOT?</h3></div><p>Слабую сторону можно исправить внутри компании. Угроза — то, что делает конкурент и что мы не контролируем напрямую.</p></div>
+  </div>
+
+  <footer>LUMÉ — вымышленная компания, часть портфолио (проект 2 из 7). <a href="../">Все проекты</a>.</footer>
+</div>
