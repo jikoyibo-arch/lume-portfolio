@@ -205,6 +205,16 @@
   td.price{text-align:right;font-family:'IBM Plex Mono',monospace;}
   .table-wrap{overflow-x:auto;}
 
+  .faq{display:flex;flex-direction:column;}
+  .faq details{border-top:1px solid var(--line);padding:14px 0;}
+  .faq details:last-child{border-bottom:1px solid var(--line);}
+  .faq summary{cursor:pointer;list-style:none;font-size:.9rem;font-weight:600;display:flex;align-items:baseline;gap:10px;}
+  .faq summary::-webkit-details-marker{display:none;}
+  .faq summary::before{content:'+';font-family:'IBM Plex Mono',monospace;color:var(--accent);font-weight:700;width:14px;flex:none;}
+  .faq details[open] summary::before{content:'–';}
+  .faq details[open] summary{color:var(--accent);}
+  .faq details p{margin:10px 0 0 24px;font-size:.85rem;color:var(--ink-muted);line-height:1.6;max-width:62ch;}
+
   footer{border-top:1px solid var(--line);padding-top:22px;font-size:.78rem;color:var(--ink-faint);line-height:1.7;}
   footer strong{color:var(--ink-muted);}
   .src-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:4px 24px;margin-top:10px;}
@@ -318,7 +328,7 @@
         </div>
       </div>
       <div class="field-row">
-        <div class="row-top"><label>Директ → запись, %<span class="tag">меняется тумблером, оценка — вдохновлено эффектом Oldroyd/HBR 2011, см. инсайт №1</span></label></div>
+        <div class="row-top"><label>Директ → запись, %<span class="tag">меняется тумблером, источник: LeadResponse.co / Naiva.ai (данные по бьюти-салонам), см. инсайт №1</span></label></div>
         <div class="row-controls">
           <input type="range" id="in-bookingRate-r" min="5" max="70" value="42" step="1">
           <input type="number" id="in-bookingRate" value="42" step="1">
@@ -374,7 +384,7 @@
       <h3>Senior‑инсайты модели</h3>
       <div class="insight-card">
         <span class="tag-num">1</span><h4>Скорость ответа в директ — это CAC‑рычаг</h4>
-        <p>Реальное исследование 100 000+ лидов (Oldroyd, MIT/InsideSales 2007; Harvard Business Review 2011) показало: ответ за 5 минут вместо 30 даёт в 100× выше шанс достучаться и в 21× выше шанс квалифицировать интерес; ответ в течение часа — в 7× выше шанс квалификации, чем через 2 часа; качество лида падает на 80% уже после первых 5 минут. Это исследование про B2B‑лиды, не про бьюти‑директ — поэтому 15%/42% в этой модели наша собственная оценка масштаба для этого рынка, а не цифра из исследования. Но направление и сила эффекта реальные: переключи тумблер и посмотри на разницу.</p>
+        <p>По данным LeadResponse.co и Naiva.ai (специализируются именно на DM‑бронированиях в бьюти‑салонах): базовая конверсия «директ → запись» обычно ниже 15%, а при дисциплинированном быстром ответе поднимается до 35–50% — большинство салонов теряют 30–40% записей на медленных или пропущенных ответах. Это вендорские источники (продают инструменты автоматизации директа), не независимое академическое исследование — тот же уровень достоверности, что у других отраслевых блогов в этом проекте. Направление эффекта дополнительно подтверждено независимым B2B‑исследованием 100 000+ лидов (Oldroyd, MIT/InsideSales 2007; Harvard Business Review 2011) — другой контекст, но тот же эффект. Переключи тумблер и посмотри на разницу.</p>
       </div>
       <div class="insight-card">
         <span class="tag-num">2</span><h4>LTV считаем по марже, а не по чеку</h4>
@@ -410,16 +420,56 @@
     </div>
   </section>
 
+  <section>
+    <div class="section-head"><h2>Вероятные вопросы на собеседовании</h2><div class="desc">Короткие ответы простым языком — полный разбор по ссылке в футере</div></div>
+    <div class="panel faq">
+      <details>
+        <summary>Что такое CPA и как вы его посчитали?</summary>
+        <p>CPA (Cost Per Acquisition) — сколько стоит привлечь одного оплатившего клиента. Рекламный бюджет делим на число клиентов, дошедших до оплаты после всей воронки: клик → директ → запись → визит.</p>
+      </details>
+      <details>
+        <summary>Почему LTV считается по марже, а не по чеку?</summary>
+        <p>Чек — это деньги клиента, а не деньги компании. Из чека мастер забирает комиссию (~40%), ещё уходит на расходники (~8%). Реальная прибыль — маржа вклада (~52% от чека). Считать LTV по чеку — классическая ошибка новичка.</p>
+      </details>
+      <details>
+        <summary>Что такое LTV:CAC и откуда порог 3x?</summary>
+        <p>Соотношение «сколько клиент принёс» к «сколько стоило его привлечь». Правило «минимум 3x» — из венчурной/SaaS‑индустрии, но логика универсальна: нужен запас на аренду, зарплаты, форс‑мажоры.</p>
+      </details>
+      <details>
+        <summary>Откуда цифры — вы их выдумали?</summary>
+        <p>Нет. Цены — из открытых прайсов киевских студий и пропорций рынка США. CPC/CTR — из отчётов WordStream. Ритеншн — из исследования Join Blvd. Эффект скорости ответа — из данных LeadResponse.co/Naiva.ai по бьюти-салонам, дополнительно подтверждён независимым B2B-исследованием Oldroyd/HBR. Часть цифр — обоснованная оценка, явно помеченная как оценка.</p>
+      </details>
+      <details>
+        <summary>Почему ROI за первый месяц отрицательный — это провал?</summary>
+        <p>Нет, это нормально для сервиса с повторными визитами. В первый месяц вы платите за привлечение, а прибыль с клиента размазана на визиты вперёд. Судить нужно по LTV, а не по первому месяцу.</p>
+      </details>
+      <details>
+        <summary>Зачем payback‑период, если уже есть LTV:CAC?</summary>
+        <p>LTV:CAC отвечает «выгодно ли в принципе», payback — «как быстро вернутся деньги». Кампания может быть выгодной по ratio, но с payback в 18 месяцев — и тогда её нечем финансировать при ограниченном кэше.</p>
+      </details>
+      <details>
+        <summary>Как скорость ответа в директ влияет на расчёт?</summary>
+        <p>По данным LeadResponse.co и Naiva.ai, у бьюти-салонов конверсия «директ → запись» обычно ниже 15% без дисциплины ответа и растёт до 35–50% при быстром, стабильном ответе — это меняет CPA и ретеншн одновременно, один операционный процесс двигает экономику сильнее, чем рост бюджета.</p>
+      </details>
+      <details>
+        <summary>Если бюджет вырастет вдвое, что будет с CPA?</summary>
+        <p>В модели — почти ничего, все конверсии заданы в процентах. В реальности CPA обычно растёт («выжигание» дешёвой аудитории первой) — модель это не учитывает, и это честно можно назвать её ограничением.</p>
+      </details>
+    </div>
+  </section>
+
   <footer>
-    <strong>Источники и допущения.</strong> Цифры с пометкой «источник» взяты из открытых отраслевых данных: WordStream (Meta/Google Ads Beauty &amp; Personal Care — CPC, CTR, CPL по категории), SBA (норма рекламного бюджета 7–8% от выручки для B2C‑малого бизнеса), Join Blvd (retention 35% на первый повторный визит, 45–70% в среднем по индустрии), агрегированные прайс‑листы киевских студий и структура клиентской карты YCLIENTS/Altegio. Эффект скорости ответа (инсайт №1) — из реального исследования Oldroyd (MIT/InsideSales, 2007) и Harvard Business Review (2011); это B2B‑исследование, поэтому конкретные проценты 15%/42% в модели — наша оценка масштаба эффекта для бьюти‑директа, честно помеченная как оценка, а не прямая цифра из исследования. Цифры с пометкой «оценка» вообще — обоснованные допущения там, где точных публичных данных по украинскому рынку бьюти‑услуг нет.
+    <strong>Источники и допущения.</strong> Цифры с пометкой «источник» взяты из открытых отраслевых данных: WordStream (Meta/Google Ads Beauty &amp; Personal Care — CPC, CTR, CPL по категории), SBA (норма рекламного бюджета 7–8% от выручки для B2C‑малого бизнеса), Join Blvd (retention 35% на первый повторный визит, 45–70% в среднем по индустрии), агрегированные прайс‑листы киевских студий и структура клиентской карты YCLIENTS/Altegio. Эффект скорости ответа (инсайт №1, 15%/42%) — из отраслевых данных LeadResponse.co и Naiva.ai по бьюти‑салонам (вендорские источники, тот же уровень достоверности, что у остальных отраслевых блогов в списке); направление эффекта дополнительно подтверждено независимым B2B‑исследованием Oldroyd (MIT/InsideSales, 2007) и Harvard Business Review (2011) — разный контекст, поэтому источники не смешаны в одну цифру. Цифры с пометкой «оценка» вообще — обоснованные допущения там, где точных публичных данных по украинскому рынку бьюти‑услуг нет.
     <div class="src-grid">
       <span>· WordStream Advertising Benchmarks</span>
       <span>· U.S. Small Business Administration — marketing budget guidance</span>
       <span>· Join Blvd — salon retention benchmarks 2026</span>
-      <span>· Oldroyd (MIT) / Harvard Business Review 2011 — speed‑to‑lead effect</span>
+      <span>· LeadResponse.co / Naiva.ai — DM‑to‑booking data, beauty salons</span>
+      <span>· Oldroyd (MIT) / Harvard Business Review 2011 — corroborating B2B speed‑to‑lead effect</span>
       <span>· YCLIENTS / Altegio — client‑record schema reference</span>
     </div>
     <div style="margin-top:14px;">LUMÉ — вымышленная компания, созданная как часть портфолио маркетолога‑ассистента (проект 1 из 7). Экономика построена на реальных бенчмарках, а не на произвольных числах.</div>
+    <div style="margin-top:10px;">Ещё по проекту 1: <a href="shpargalka.html">короткая шпаргалка</a> и <a href="deep-dive.html">полный разбор допущений</a>. Все проекты — <a href="../">на главной портфолио</a>.</div>
   </footer>
 
 </div>
